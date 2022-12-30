@@ -19,10 +19,14 @@ a:
 /*
  * CONSTANTS
  */
-.equ    LED_ONES,      12
-.equ    LED_TWOS,      13
-.equ    LED_FOURS,     14
-.equ    LED_EIGHTS,    15
+.equ    LED_ONES,      16
+.equ    LED_TWOS,      17
+.equ    LED_FOURS,     19
+.equ    LED_EIGHTS,    20
+.equ    LED_4,         21
+.equ    LED_5,         22
+.equ    LED_6,         23
+.equ    LED_7,         24
 .equ    GPIO_DIR_IN,    0
 .equ    GPIO_DIR_OUT,   1
 .equ    PIN_HIGH,       1
@@ -36,6 +40,8 @@ a:
  */
 .syntax unified                     @ Use ARM unified syntax, ie.
                                     @ mandate S suffix for lo registers
+.cpu cortex-m0plus                  @ Set the CPU type
+.thumb
 .thumb_func                         @ This code uses Thumb instructions
 .global main                        @ Set entry point
 
@@ -43,38 +49,38 @@ a:
  * RUNTIME START
  */
 main:
-init:   bl stdio_init_all           @ Jump to SDK STDIO initialisation routine
-        movs r0, #0x80              @ Set the delay period
+init:   bl   stdio_init_all           @ Jump to SDK STDIO initialisation routine
+        movs r0, #0x80                @ Set the delay period
         lsls r0, #4
-        bl sleep_ms                 @ Delay to allow the STDIO-over-USB to ready
+        bl   sleep_ms                 @ Delay to allow the STDIO-over-USB to ready
 
-        movs r0, #LED_ONES          @ Set the pin number for ONES LED
-        bl gpio_init                @ Jump to SDK GPIO initialisation routine
+        movs r0, #LED_ONES            @ Set the pin number for ONES LED
+        bl   gpio_init                @ Jump to SDK GPIO initialisation routine
 
-        movs r0, #LED_ONES          @ Set the pin number for ONES LED
-        movs r1, #GPIO_DIR_OUT      @ Set the pin direction for ONES LED
-        bl gpio_set_direction       @ Jump to SDK pin direction routine
+        movs r0, #LED_ONES            @ Set the pin number for ONES LED
+        movs r1, #GPIO_DIR_OUT        @ Set the pin direction for ONES LED
+        bl   gpio_set_direction       @ Jump to SDK pin direction routine
 
-        movs r0, #LED_TWOS          @ Set the pin number for TWOS LED
-        bl gpio_init                @ Jump to SDK GPIO initialisation routine
+        movs r0, #LED_TWOS            @ Set the pin number for TWOS LED
+        bl   gpio_init                @ Jump to SDK GPIO initialisation routine
 
-        movs r0, #LED_TWOS          @ Set the pin number for TWOS LED
-        movs r1, #GPIO_DIR_OUT      @ Set the pin direction for TWOS LED
-        bl gpio_set_direction       @ Jump to SDK pin direction routine
+        movs r0, #LED_TWOS            @ Set the pin number for TWOS LED
+        movs r1, #GPIO_DIR_OUT        @ Set the pin direction for TWOS LED
+        bl   gpio_set_direction       @ Jump to SDK pin direction routine
 
-        movs r0, #LED_FOURS         @ Set the pin number for FOURS LED
-        bl gpio_init                @ Jump to SDK GPIO initialisation routine
+        movs r0, #LED_FOURS           @ Set the pin number for FOURS LED
+        bl   gpio_init                @ Jump to SDK GPIO initialisation routine
 
-        movs r0, #LED_FOURS         @ Set the pin number for FOURS LED
-        movs r1, #GPIO_DIR_OUT      @ Set the pin direction for FOURS LED
-        bl gpio_set_direction       @ Jump to SDK pin direction routine
+        movs r0, #LED_FOURS           @ Set the pin number for FOURS LED
+        movs r1, #GPIO_DIR_OUT        @ Set the pin direction for FOURS LED
+        bl   gpio_set_direction       @ Jump to SDK pin direction routine
 
         movs r0, #LED_EIGHTS        @ Set the pin number for EIGHTS LED
-        bl gpio_init                @ Jump to SDK GPIO initialisation routine
+        bl   gpio_init                @ Jump to SDK GPIO initialisation routine
 
         movs r0, #LED_EIGHTS        @ Set the pin number for EIGHTS LED
         movs r1, #GPIO_DIR_OUT      @ Set the pin direction for EIGHTS LED
-        bl gpio_set_direction       @ Jump to SDK pin direction routine
+        bl   gpio_set_direction       @ Jump to SDK pin direction routine
 
         b info                      @ Jump to the CPU info readout
 fibsetup:
@@ -148,7 +154,7 @@ fib_inner_loop:
         bne   fib_inner_loop         @ If n is not zero, loop
 ************************************************************************
 */
-        ldr   r1, =a                 @ pin array address
+        ldr   r6, =a                 @ pin array address
         movs  r2, #4                 @ array length
         bl    put_value_on_pins      @ Display the value of a on the LEDs
         ldr   r0, #FIB_DELAY_MS      @ Set the delay period
@@ -183,48 +189,48 @@ loop:   movs  r0, #LED_ONES          @ Set the pin number
                                     @ NOTE This form assembles as PC offset addressing,
                                     @      so make sure DELAY_TIME_MS is an address in the
                                     @      code space rather not the .data space
-        bl sleep_ms                 @ Delay
+        bl   sleep_ms                 @ Delay
 
         movs r0, #LED_TWOS          @ Set the pin number
         movs r1, #PIN_LOW           @ Set the pin state
-        bl gpio_set_state           @ Jump to SDK pin state routine
+        bl   gpio_set_state           @ Jump to SDK pin state routine
 
         ldr r0, DELAY_TIME_MS       @ Set the delay period
-        bl sleep_ms                 @ Delay
+        bl   sleep_ms                 @ Delay
 
         movs r0, #LED_FOURS         @ Set the pin number
         movs r1, #PIN_HIGH          @ Set the pin state
-        bl gpio_set_state           @ Jump to SDK pin state routine
+        bl   gpio_set_state           @ Jump to SDK pin state routine
 
         ldr r0, DELAY_TIME_MS       @ Set the delay period
                                     @ NOTE This form assembles as PC offset addressing,
                                     @      so make sure DELAY_TIME_MS is an address in the
                                     @      code space rather not the .data space
-        bl sleep_ms                 @ Delay
+        bl   sleep_ms                 @ Delay
 
         movs r0, #LED_FOURS         @ Set the pin number
         movs r1, #PIN_LOW           @ Set the pin state
-        bl gpio_set_state           @ Jump to SDK pin state routine
+        bl   gpio_set_state           @ Jump to SDK pin state routine
 
         ldr r0, DELAY_TIME_MS       @ Set the delay period
-        bl sleep_ms                 @ Delay
+        bl   sleep_ms                 @ Delay
 
         movs r0, #LED_EIGHTS        @ Set the pin number
         movs r1, #PIN_HIGH          @ Set the pin state
-        bl gpio_set_state           @ Jump to SDK pin state routine
+        bl   gpio_set_state           @ Jump to SDK pin state routine
 
         ldr r0, DELAY_TIME_MS       @ Set the delay period
                                     @ NOTE This form assembles as PC offset addressing,
                                     @      so make sure DELAY_TIME_MS is an address in the
                                     @      code space rather not the .data space
-        bl sleep_ms                 @ Delay
+        bl   sleep_ms                 @ Delay
 
         movs r0, #LED_EIGHTS        @ Set the pin number
         movs r1, #PIN_LOW           @ Set the pin state
-        bl gpio_set_state           @ Jump to SDK pin state routine
+        bl   gpio_set_state           @ Jump to SDK pin state routine
 
         ldr r0, DELAY_TIME_MS       @ Set the delay period
-        bl sleep_ms                 @ Delay
+        bl   sleep_ms                 @ Delay
 
         b loop                      @ Loop infinitely
 
@@ -234,7 +240,7 @@ info:   ldr r5, CPUID               @ Get the address of CPUID
         @ Write out the CPUID register
         ldr r0, =TEXT0              @ Set the printf format string
         movs r1, r5                 @ Set the printf value
-        bl printf
+        bl   printf
 
         @ Write out the part number
         ldr r0, =TEXT1              @ Set the format string
@@ -244,7 +250,7 @@ info:   ldr r5, CPUID               @ Get the address of CPUID
         adds r3, #0xF0
         ands r1, r3                 @ Mask CPUID bits 15-4
         lsrs r3, #4
-        bl printf
+        bl   printf
 
         @ Write out the revision
         ldr r0, =TEXT2              @ Set the format string
@@ -253,14 +259,14 @@ info:   ldr r5, CPUID               @ Get the address of CPUID
         lsls r3, #20
         ands r1, r3                 @ Mask CPUID bits 23-20
         lsrs r3, #20
-        bl printf
+        bl   printf
 
         @ Write out the variant number
         ldr r0, =TEXT3              @ Set the format string
         movs r1, r5                 @ Set the printf value to the CPUID value
         movs r3, #0x0F              @ Set the AND mask
         ands r1, r3                 @ Mask CPUID bits 3-0
-        bl printf
+        bl   printf
 
         @ FROM 1.0.1 -- unified syntax test
         movs r0, #0                 @ Clear r0
@@ -271,33 +277,26 @@ info:   ldr r5, CPUID               @ Get the address of CPUID
         bne xinfo                   @ Jump out if r1 != r2
 
         ldr r0, =TEXT4              @ Output match message
-        bl printf
+        bl   printf
 
 xinfo:  b test_pvop                 @ Test put_value_on_pins
 
 put_value_on_pins:
-        push   {r4, r5, r6, r7, r8} @ Save the registers we are going to use
-        movs  r2, r0                @ Save the value to display
-        movs  r3, #1                @ Bit masks
-        // movs  r4, 0x02
-        // movs  r5, 0x04
-        // movs  r6, 0x08
-        ldr   r8, =a
-        ands  r4, r2, r3            @ Mask bit 0
-        lsls  r3, #1                @ Shift the mask
-        ands  r5, r2, r3            @ Mask bit 1
-        lsls  r3, #1                @ Shift the mask
-        ands  r6, r2, r3            @ Mask bit 2
-        lsls  r3, #1                @ Shift the mask
-        ands  r7, r2, r3            @ Mask bit 3
-
-        ldr   r0, r8                @ Set the LED pin number
-        movs  r1, #PIN_HIGH         @ Set the pin state
-        cmp   r4, #0                @ Test bit 0
-        bne   set_pin_high          @ Jump to set the pin high if bit 0 is set
-        bl    gpio_set_state        @ Set the pin low if bit 0 is clear
-        b     set_pin_low           @ Jump to set the pin low
-
+        push  {r4, r5, r6, r7}      @ Save the registers we are going to use
+        movs  r3, r0                @ Save the value to display
+        movs  r1, #1                @ Bit mask initial value
+        movs  r4, #0                @ index
+set_pin:
+        movs  r5, #4                @ compute the offset
+        muls  r5, r4                @ the offset
+        ands  r1, r3                @ Mask a bit, value stays in r3
+        ldr   r0, [r6, r5]          @ fetch pin value from array at r6 offset by r5
+        bl    gpio_set_state        @ set the pin
+        adds  r4, #1                @ increment index
+        cmp   r4, r2                @ 0 bits remaining?
+        bne   set_pin               @ if not, jump to set the next pin
+        pop   {r4, r5, r6, r7}      @ restore saved registers
+        bx    lr                    @ return to caller
 
 test_pvop:
         movs r0, #15                 @ Value to display
