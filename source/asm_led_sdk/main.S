@@ -281,7 +281,7 @@ info:   ldr r5, CPUID               @ Get the address of CPUID
 
 xinfo:  b test_pvop                 @ Test put_value_on_pins
 
-put_value_on_pins:
+NEVER_USED:                         @ was put_value_on_pins
         push  {r4, r5, r6, r7}      @ Save the registers we are going to use
         movs  r3, r0                @ Save the value to display
         movs  r1, #1                @ Bit mask initial value
@@ -309,6 +309,7 @@ test_pvop:
 
         b test_pvop                 @ Loop
 
+put_value_on_pins:
 finish:
         //movs  r0, 0                 @ index
         //ldr   r3, =a                @ array address

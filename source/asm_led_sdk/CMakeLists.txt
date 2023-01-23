@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.14)
 # Include app source code file(s)
 add_executable(${APP_1_NAME}
                ${COMMON_SRC_DIRECTORY}/sdk_inlines.c
-               #${APP_1_SRC_DIRECTORY}/val_on_pins.c
+               ${APP_1_SRC_DIRECTORY}/val_on_pins.c
                ${APP_1_SRC_DIRECTORY}/fib.c
                ${APP_1_SRC_DIRECTORY}/main.S
 )

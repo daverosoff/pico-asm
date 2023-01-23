@@ -8,8 +8,8 @@
  *
  */
 
-
 #include "hardware/gpio.h"
+#include "sdk_inlines.h"
 
 /*
  * These functions are placeholders for SDK functions
